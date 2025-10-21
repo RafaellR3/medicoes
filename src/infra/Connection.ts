@@ -2,15 +2,17 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { ConsumidorEntity } from "../entidades/consumidor/ConsumidorEntity";
 import { MedicaoEntity } from "../entidades/medicao/MedicaoEntity";
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const Connection = new DataSource({
   type: "mysql",
-  host: "medicoes-db-medicoes.g.aivencloud.com",
-  port: 28790,
-  username: "avnadmin",
-  password: "AVNS_7I4eKtKdf8-iQev1Dt9",
-  database: "defaultdb",
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 4000,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   entities: [ConsumidorEntity, MedicaoEntity],
-  synchronize: true, // só para desenvolvimento
+  synchronize: true, 
   logging: false
 });

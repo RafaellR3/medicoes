@@ -77,7 +77,6 @@ export class MedicaoRepositorio {
       },
       order: { timestamp: 'DESC' },
     });
-console.log(primeira, ultima);
     if (!primeira || !ultima) {
       return 0; // Sem medições no período
     }
