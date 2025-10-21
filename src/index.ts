@@ -18,9 +18,8 @@ const conectar = async () => {
   });
 };
 
-const startApp = async () => {
-  await conectar(); // aguarda conexão bem-sucedida
-
+const startApp = async () => {  
+  await conectar(); 
   app.listen(port, () => {
     console.log(`API rodando em http://localhost:${port}`);
   });

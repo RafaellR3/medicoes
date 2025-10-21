@@ -35,5 +35,3 @@ export async function startConsumer() {
 
   console.log("Consumidor rodando...");
 }
-
-startConsumer().catch(console.error);

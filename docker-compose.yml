@@ -14,11 +14,12 @@ services:
       - DB_USER=root
       - DB_PASSWORD=123456
       - DB_NAME=leituras_db
-      - RABBITMQ_URL=amqp://rabbitmq
+      - RABBITMQ_URL=amqp://admin:admin@rabbitmq
       - PORT=3000
     volumes:
       - .:/app
-    command: sh -c "npm run build && npm start"
+    command: sh -c "npx wait-port db:3306 && npm run build && npm start"
+
 
   db:
     image: mysql:8
@@ -31,6 +32,8 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+      - ./init-sql:/docker-entrypoint-initdb.d
+
 
   rabbitmq:
     image: rabbitmq:3-management
