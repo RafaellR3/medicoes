@@ -25,10 +25,10 @@ services:
     container_name: leitura_mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: AVNS_7I4eKtKdf8-iQev1Dt9
-      MYSQL_DATABASE: defaultdb
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: leituras_db
     ports:
-      - "28790:28790"
+      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
 
@@ -40,8 +40,8 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
 
 volumes:
   db_data:

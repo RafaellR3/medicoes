@@ -12,5 +12,5 @@ export const Connection = new DataSource({
   database: "defaultdb",
   entities: [ConsumidorEntity, MedicaoEntity],
   synchronize: true, // só para desenvolvimento
-  logging: true
+  logging: false
 });
