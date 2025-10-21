@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: leitura_app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - rabbitmq
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=123456
+      - DB_NAME=leituras_db
+      - RABBITMQ_URL=amqp://rabbitmq
+      - PORT=3000
+    volumes:
+      - .:/app
+    command: sh -c "npm run build && npm start"
+
+  db:
+    image: mysql:8
+    container_name: leitura_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: AVNS_7I4eKtKdf8-iQev1Dt9
+      MYSQL_DATABASE: defaultdb
+    ports:
+      - "28790:28790"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: leitura_rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+volumes:
+  db_data:
