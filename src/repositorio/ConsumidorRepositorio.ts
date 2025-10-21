@@ -22,16 +22,6 @@ export class ConsumidorRepositorio {
     const saved = await this.repo.update(consumidor.id, entity).then(() => this.repo.findOneBy({ id: consumidor.id })) as ConsumidorEntity;
     return toDomain(saved);
   }
-
-  async findById(id: number): Promise<Consumidor | null> {
-    const entity = await this.repo.findOne({ where: { id } });
-    return entity ? toDomain(entity) : null;
-  }
-
-  async findAll(): Promise<Consumidor[]> {
-    const entities = await this.repo.find();
-    return entities.map(toDomain);
-  }
   
   async findByUC(uC: string): Promise<Consumidor | null> {
     const entity = await this.repo.findOne({ where: { uC } });

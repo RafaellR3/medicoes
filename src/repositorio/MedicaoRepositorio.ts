@@ -45,11 +45,12 @@ export class MedicaoRepositorio {
       return [];
     }
     const idconsumidor = consumidor.id;
+    
     return await this.repo.find({
       where: {
         idconsumidor: idconsumidor,
         timestamp: Between(inicio, fim)
-      },
+      }
     });
   }
 

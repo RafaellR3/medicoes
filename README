@@ -1,0 +1,59 @@
+## Microserviço de Medições via RabbitMQ
+
+Este projeto implementa um microserviço em Node.js com TypeScript que consome mensagens de medidores via RabbitMQ, processa e armazena em MySQL, e expõe uma API REST para consulta.
+
+## Tecnologias utilizadas
+
+- Node.js + TypeScript
+- Express
+- RabbitMQ
+- MySQL
+- Docker + Docker Compose
+- Sequelize (ORM)
+- dotenv
+
+---
+
+ ## Estrutura do projeto
+ EITURAMEDIDORES/
+├── dist/                     # Arquivos compilados (TypeScript → JavaScript)
+├── init-sql/                 # Scripts de inicialização do banco de dados
+├── node_modules/             # Dependências instaladas via npm
+├── rabbitmq-node/            # Configurações e testes relacionados ao RabbitMQ
+├── src/                      # Código-fonte principal
+│   ├── app/                  # Camada de aplicação
+│   │   ├── controllers/      # Lógica das rotas e entrada da API
+│   │   ├── dominio/          # Regras de negócio (validações, políticas)
+│   │   ├── entidades/        # Modelos e estruturas de dados
+│   │   ├── infra/            # Integrações externas (RabbitMQ, MySQL)
+│   │   ├── repositorio/      # Acesso ao banco de dados
+│   │   ├── routes/           # Definição das rotas da API
+│   │   └── index.ts          # Ponto de entrada da aplicação
+├── docker-compose.yml        # Orquestração de serviços (Node, MySQL, RabbitMQ)
+├── Dockerfile                # Imagem Docker do microserviço
+
+
+## Comando para rodar o projeto usando docker-compose
+  docker-compose up -d
+
+Optei por salvar apenas o id da ultima medição no consumidor para evitar duplicidade de informações.
+
+Coloquei a criação da fila junto ao consumer por não ter um producer, mas poderia ser feito seprado também.
+
+Basicante toda regra de negocio está concentrada no dominio. Por se tratar de um processo unico e basicamente simples, está tudo em uuma unica classe.
+
+
+## Questão conceitual 
+Imagine que a tabela de medições (medicoes) cresceu para mais de 300GB, com 200 milhões de registros. Qual estratégia você utilizaria para:
+
+Adicionar uma nova coluna (ex: origem) sem causar downtime?
+  - Primeiramente este campo seria criado como nullble, e fora do horário poderia ser utilizado estratégias de popular este campo como MERGE, ou metodologias de incrementação em lote. 
+
+Otimizar as consultas REST para períodos longos?
+  - Crindo indíces compostos na tabela de medicoes, como por exemplo origem e data.
+  - Buscar informações paginadas  
+
+Manter performance nas gravações (via RabbitMQ) mesmo em horários de pico?
+  - Criando exchanges, fazendo divisões por região ou grupo de clientes.
+  - Aumentando o número de consumers de forma controla e cuidadosa, em horario de picos.
+  - Pensar uma lógica para inserir em lote.
